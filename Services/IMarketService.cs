@@ -9,15 +9,14 @@ namespace MarketDayAlertApp.Services
 {
     public interface IMarketService
     {
-        public void CreateMarket(Market market);
+        public void CreateMarket(CreateMarketDto market);
 
         public void UpdateMarket(UpdateMarketDto updatedMarket , int Id);
 
         public IList<MarketDto> ListMarkets();
 
         public void DeleteMarket(int Id);
-
-        public Market FindMarket(int Id);
+        public MarketDto FindMarket(int Id);
 
 
     }

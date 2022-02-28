@@ -12,7 +12,7 @@ namespace MarketDayAlertApp.Entities
 
         public string Message { get; set; }
 
-        public NotificationType Type { get; set; }
+        public SubscriptionType Type { get; set; }
         public string RecipientEmail { get; set; }
         public DateTime ScheduledDate { get; set; }
     }

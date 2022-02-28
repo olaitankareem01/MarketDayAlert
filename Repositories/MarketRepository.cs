@@ -35,6 +35,7 @@ namespace MarketDayAlertApp.Repositories
         {
             return _dbContext.Markets.Select(m => new MarketDto
             {
+                Id = m.Id,
                 Name = m.Name,
                 Address = m.Address,
                 location = m.location.Name,

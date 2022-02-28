@@ -1,9 +1,7 @@
-﻿using MarketDayAlertApp.Context;
-using MarketDayAlertApp.Models.DTOs;
+﻿using MarketDayAlertApp.Models.ViewModels;
 using MarketDayAlertApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,50 +9,47 @@ using System.Threading.Tasks;
 
 namespace MarketDayAlertApp.Controllers
 {
-    public class MarketsController : Controller
+    public class AccountController : Controller
     {
-        private readonly IMarketService _marketService;
-        private readonly ILocationService _locationService;
-        public MarketsController(IMarketService marketService,ILocationService locationService)
+        private readonly IUserService _userService;
+       
+
+        public AccountController(IUserService userService)
         {
-            _marketService = marketService;
-            _locationService = locationService;
+            _userService = userService;
         }
-        // GET: MarketsController
+        // GET: AccountController
         public ActionResult Index()
         {
-            var markets = _marketService.ListMarkets();
-            return View(markets);
-        }
-
-        // GET: MarketsController/Details/5
-        public ActionResult Details(int id)
-        {
-            var market = _marketService.FindMarket(id);
-            return View(market);
-        }
-
-        // GET: MarketsController/Create
-        public ActionResult Create()
-        {
-            var locations = _locationService.ListLocations();
-            List <SelectListItem> locationlists = new List<SelectListItem>();
-            foreach(var item in locations)
-            {
-                locationlists.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-            }
-            ViewBag.locations = locationlists;
             return View();
         }
 
-        // POST: MarketsController/Create
+        // GET: AccountController/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        // GET: AccountController/Create
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: AccountController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CreateMarketDto market)
+        public ActionResult Create(CreateUserViewModel user)
         {
             try
             {
-                _marketService.CreateMarket(market);
+               /* if (ModelState.IsValid)
+                {
+                    if(user.Password == user.ConfirmPassword)
+                    {
+
+                    }
+                }*/
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -63,13 +58,13 @@ namespace MarketDayAlertApp.Controllers
             }
         }
 
-        // GET: MarketsController/Edit/5
+        // GET: AccountController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: MarketsController/Edit/5
+        // POST: AccountController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -84,13 +79,13 @@ namespace MarketDayAlertApp.Controllers
             }
         }
 
-        // GET: MarketsController/Delete/5
+        // GET: AccountController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: MarketsController/Delete/5
+        // POST: AccountController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

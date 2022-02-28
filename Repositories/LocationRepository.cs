@@ -1,5 +1,6 @@
 ﻿using MarketDayAlertApp.Context;
 using MarketDayAlertApp.Entities;
+using MarketDayAlertApp.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,14 @@ namespace MarketDayAlertApp.Repositories
 
         }
 
-        public IList<MarketLocation> ListLocation()
+        public IList<LocationDto> ListLocation()
         {
-            return _dbContext.MarketLocations.ToList();
+            return _dbContext.MarketLocations.Select(l => new LocationDto {
+                Id = l.Id,
+                Name = l.Name,
+                State = l.State
+
+            }).ToList();
 
         }
 
@@ -42,6 +48,7 @@ namespace MarketDayAlertApp.Repositories
         public void Delete(MarketLocation location)
         {
             _dbContext.MarketLocations.Remove(location);
+            _dbContext.SaveChanges();
         }
     }
 }

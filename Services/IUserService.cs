@@ -9,14 +9,14 @@ namespace MarketDayAlertApp.Services
 {
     public interface IUserService 
     {
-        public void CreateUser(User user);
+        public void CreateUser(UserDto user);
 
         public void UpdateUser(UpdateUserDto UpdatedUser, int Id);
 
-        public IList<User> ListUsers();
+        public IList<UserDto> ListUsers();
 
         public void DeleteUser(int Id);
 
-        public User FindUser(int Id);
+        public UserDto FindUser(int Id);
     }
 }

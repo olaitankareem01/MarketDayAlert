@@ -1,4 +1,4 @@
-﻿@model MarketDayAlertApp.Models.DTOs.CreateMarketDto
+﻿@model MarketDayAlertApp.Models.ViewModels.CreateMarketViewModel;
 
 @{
     ViewData["Title"] = "Create";
@@ -23,9 +23,14 @@
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LocationId" class="control-label">Location</label>
-                <input asp-for="LocationId" class="form-control" type="number" />
-                <span asp-validation-for="LocationId" class="text-danger"></span>
+                <label class="control-label">Location</label>
+                <input asp-for="LocationId" class="form-control"/>
+        <span asp-validation-for="LocationId" class="text-danger"></span>
+
+             
+                <p class="alert-danger">@ViewBag.Message</p>
+                @* @Html.DropDownList("locations",(IEnumerable<SelectListItem>) ViewBag.locations,"Select location")*@
+
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label">Last Date</label>
@@ -42,7 +47,7 @@
            
             <div class="form-group">
                 <label asp-for="Frequency" class="control-label">How often does the market hold?</label>
-                <select asp-for="Frequency" class="form-control"></select>
+                <input asp-for="Frequency" class="form-control" type="number" />
                 <span asp-validation-for="Frequency" class="text-danger"></span>
             </div>
             <div class="form-group">

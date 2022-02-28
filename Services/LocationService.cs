@@ -1,5 +1,6 @@
 ﻿using MarketDayAlertApp.Entities;
 using MarketDayAlertApp.Models;
+using MarketDayAlertApp.Models.DTOs;
 using MarketDayAlertApp.Repositories;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,19 @@ namespace MarketDayAlertApp.Services
         {
             _locationRepository = locationRepository;
         }
-        public void CreateLocation(MarketLocation location)
+        public void CreateLocation(CreateLocationDto location)
         {
-            _locationRepository.Create(location);
+            if(location!= null)
+            {
+                var newLocation = new MarketLocation
+                {
+                    Name = location.Name,
+                    State = location.State
+                };
+                _locationRepository.Create(newLocation);
+            }
+            
+           
         }
 
         public void DeleteLocation(int Id)
@@ -36,7 +47,7 @@ namespace MarketDayAlertApp.Services
             return _locationRepository.Find(Id);
         }
 
-        public IList<MarketLocation> ListLocations()
+        public IList<LocationDto> ListLocations()
         {
             return _locationRepository.ListLocation();
         }

@@ -1,4 +1,5 @@
 ﻿using MarketDayAlertApp.Entities;
+using MarketDayAlertApp.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace MarketDayAlertApp.Repositories
 
         public void Update(MarketLocation market);
 
-        public IList<MarketLocation> ListLocation();
+        public IList<LocationDto> ListLocation();
 
         public MarketLocation  Find(int Id);
 

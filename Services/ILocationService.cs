@@ -1,5 +1,6 @@
 ﻿using MarketDayAlertApp.Entities;
 using MarketDayAlertApp.Models;
+using MarketDayAlertApp.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace MarketDayAlertApp.Services
     public interface ILocationService
     {
 
-        public void CreateLocation(MarketLocation location);
+        public void CreateLocation(CreateLocationDto location);
 
         public void UpdateLocation(UpdateLocationDto UpdatedLocation,int Id);
 
-        public IList<MarketLocation> ListLocations();
+        public IList<LocationDto> ListLocations();
 
         public void DeleteLocation(int Id);
 

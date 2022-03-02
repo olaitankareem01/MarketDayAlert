@@ -16,6 +16,7 @@ namespace MarketDayAlertApp.Entities
         public int LocationId { get; set; }
         public MarketLocation location { get; set; }
 
+        public string Password { get; set; }
         public IList<Role> Roles { get; set; }
 
     };

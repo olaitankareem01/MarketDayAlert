@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MarketDayAlertApp.Migrations
 {
-    public partial class initial : Migration
+    public partial class initia : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -101,7 +101,9 @@ namespace MarketDayAlertApp.Migrations
                     DOB = table.Column<DateTime>(type: "datetime", nullable: false),
                     Address = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LocationId = table.Column<int>(type: "int", nullable: false)
+                    LocationId = table.Column<int>(type: "int", nullable: false),
+                    Password = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {

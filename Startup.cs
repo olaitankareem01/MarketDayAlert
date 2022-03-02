@@ -3,6 +3,7 @@ using MarketDayAlertApp.Repositories;
 using MarketDayAlertApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,9 @@ namespace MarketDayAlertApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             services.AddControllersWithViews();
 
             string ConnectionString = Configuration.GetConnectionString("DefaultConnection");
@@ -45,7 +49,14 @@ namespace MarketDayAlertApp
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
-            
+            services.AddHttpContextAccessor();
+       /*     services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +77,7 @@ namespace MarketDayAlertApp
 
             app.UseRouting();
 
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

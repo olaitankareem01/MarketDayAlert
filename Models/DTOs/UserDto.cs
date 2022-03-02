@@ -16,5 +16,6 @@ namespace MarketDayAlertApp.Models.DTOs
         public int LocationId { get; set; }
 
         public int UserType { get; set; }
+        public string Password { get; internal set; }
     }
 }

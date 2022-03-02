@@ -153,6 +153,9 @@ namespace MarketDayAlertApp.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");

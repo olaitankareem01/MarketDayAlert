@@ -5,26 +5,80 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BCrypt.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace MarketDayAlertApp.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
+
+        public UserService(IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _userRepository = userRepository;
+            _httpContextAccessor = httpContextAccessor;
+           
+        }
+
+        public bool Login(string Email, string Password)
+        {
+            var User = _userRepository.FindByEmail(Email);
+
+            if(User != null)
+            {
+              var IsValidPassword =  BCrypt.Net.BCrypt.Verify(Password,User.Password);
+
+               if(IsValidPassword == true)
+                {
+                    _session.SetInt32("UserId", User.Id);
+                    _session.SetString("Email", User.Email);
+                    _session.SetString("LastName", User.LastName);
+                    _session.SetString("FirstName",User.FirstName);
+                    _session.SetInt32("Location", User.LocationId);
+
+                    return true;
+                }
+                
+            }
+
+            return false;
         }
         public void CreateUser(UserDto user)
         {
-            _userRepository.Create(user);
+            if (user != null)
+            {
+                var UserExists = _userRepository.FindByEmail(user.Email);
+                if (UserExists != null)
+                {
+                    throw new Exception($"user with email {user.Email} already exists");
+                }
+
+                var HashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+                var NewUser = new User
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    DOB = user.DOB,
+                    Address = user.Address,
+                    LocationId = user.LocationId,
+                    Password = HashedPassword
+                };
+                _userRepository.Create(NewUser);
+            }
+
+          
         }
 
         public void DeleteUser(int Id)
         {
             var user = _userRepository.Find(Id);
 
-            if(user == null)
+            if (user == null)
             {
                 throw new Exception($"user with Id {Id} not found");
             }
@@ -33,8 +87,8 @@ namespace MarketDayAlertApp.Services
 
         public UserDto FindUser(int Id)
         {
-            var  UserFound =  _userRepository.Find(Id);
-            if(UserFound != null)
+            var UserFound = _userRepository.Find(Id);
+            if (UserFound != null)
             {
                 var user = new UserDto
                 {
@@ -44,7 +98,7 @@ namespace MarketDayAlertApp.Services
                     Address = UserFound.Address,
                     DOB = UserFound.DOB,
                     LocationId = UserFound.LocationId,
-                 
+
                 };
                 return user;
             }
@@ -63,7 +117,7 @@ namespace MarketDayAlertApp.Services
         {
             var user = _userRepository.Find(Id);
 
-            if(user == null)
+            if (user == null)
             {
                 throw new Exception($"user with Id {Id} not found");
             }
@@ -71,6 +125,7 @@ namespace MarketDayAlertApp.Services
             user.DOB = UpdatedUser.DOB;
             user.LocationId = UpdatedUser.UserType;
             _userRepository.Update(user);
-        } 
+        }
+
     }
 }

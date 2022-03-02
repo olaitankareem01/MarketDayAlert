@@ -18,5 +18,8 @@ namespace MarketDayAlertApp.Services
         public void DeleteUser(int Id);
 
         public UserDto FindUser(int Id);
+
+
+        public bool Login(string Email, string Password);
     }
 }

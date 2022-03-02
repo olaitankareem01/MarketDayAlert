@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketDayAlertApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220228111640_initial")]
-    partial class initial
+    [Migration("20220301110347_initia")]
+    partial class initia
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -154,6 +154,9 @@ namespace MarketDayAlertApp.Migrations
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

@@ -24,6 +24,7 @@ namespace MarketDayAlertApp.Models.ViewModels
         [Required]
         public string Password { get; set; }
         [Required]
+        [Compare("Password")]
         public string ConfirmPassword { get; set; }
     }
 }

@@ -15,21 +15,9 @@ namespace MarketDayAlertApp.Repositories
         {
             _dbContext = dbContext;
         }
-        public void Create(UserDto user)
+        public void Create(User user)
         {
-
-            var newUser = new User
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Address = user.Address,
-                DOB = user.DOB,
-                LocationId = user.LocationId
-             
-                
-            };
-            _dbContext.Users.Add(newUser);
+            _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
         }
 
@@ -52,6 +40,10 @@ namespace MarketDayAlertApp.Repositories
             }).ToList();
         }
 
+        public User FindByEmail(string Email)
+        {
+            return _dbContext.Users.SingleOrDefault(u => u.Email == Email);
+        }
         public void Update(User user)
         {
             _dbContext.Users.Update(user);

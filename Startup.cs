@@ -1,6 +1,8 @@
 using MarketDayAlertApp.Context;
 using MarketDayAlertApp.Repositories;
 using MarketDayAlertApp.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +38,7 @@ namespace MarketDayAlertApp
             string ConnectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                
+
                 opt.UseMySql(ConnectionString, new MySqlServerVersion(new Version()));
             });
 
@@ -49,17 +51,25 @@ namespace MarketDayAlertApp
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            services.AddScoped<ISubscriptionService, SubscriptionService>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IMailService, MailService>();
             services.AddHttpContextAccessor();
-       /*     services.AddSession(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(20);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            */
-        }
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            
+             
+
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -76,16 +86,18 @@ namespace MarketDayAlertApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseSession();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+       
+
         }
     }
 }

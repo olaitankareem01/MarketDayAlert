@@ -112,6 +112,29 @@ namespace MarketDayAlertApp.Migrations
                     b.ToTable("MarketLocations");
                 });
 
+            modelBuilder.Entity("MarketDayAlertApp.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RecipientEmail")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ScheduledDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("MarketDayAlertApp.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -161,6 +184,27 @@ namespace MarketDayAlertApp.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MarketDayAlertApp.Entities.UserSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("MarketId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MarketId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSubscriptions");
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -232,6 +276,25 @@ namespace MarketDayAlertApp.Migrations
                         .IsRequired();
 
                     b.Navigation("location");
+                });
+
+            modelBuilder.Entity("MarketDayAlertApp.Entities.UserSubscription", b =>
+                {
+                    b.HasOne("MarketDayAlertApp.Entities.Market", "Market")
+                        .WithMany()
+                        .HasForeignKey("MarketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MarketDayAlertApp.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Market");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RoleUser", b =>

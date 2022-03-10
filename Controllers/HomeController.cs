@@ -1,4 +1,5 @@
 ﻿using MarketDayAlertApp.Models;
+using MarketDayAlertApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +13,17 @@ namespace MarketDayAlertApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMailService _mailService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,IMailService mailService)
         {
             _logger = logger;
+            _mailService = mailService;
         }
 
         public IActionResult Index()
         {
+          /*  _mailService.SendMail();*/
             return View();
         }
 

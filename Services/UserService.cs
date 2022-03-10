@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MarketDayAlertApp.Services
 {
@@ -27,21 +29,12 @@ namespace MarketDayAlertApp.Services
         {
             var User = _userRepository.FindByEmail(Email);
 
-            if(User != null)
+            var IsValidPassword = BCrypt.Net.BCrypt.Verify(Password, User.Password);
+
+            if (User != null && IsValidPassword == true)
             {
-              var IsValidPassword =  BCrypt.Net.BCrypt.Verify(Password,User.Password);
-
-               if(IsValidPassword == true)
-                {
-                    _session.SetInt32("UserId", User.Id);
-                    _session.SetString("Email", User.Email);
-                    _session.SetString("LastName", User.LastName);
-                    _session.SetString("FirstName",User.FirstName);
-                    _session.SetInt32("Location", User.LocationId);
-
-                    return true;
-                }
-                
+              return true;
+                 
             }
 
             return false;

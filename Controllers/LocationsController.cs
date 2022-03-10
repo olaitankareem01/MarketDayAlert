@@ -1,5 +1,6 @@
 ﻿using MarketDayAlertApp.Models.DTOs;
 using MarketDayAlertApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,6 +18,7 @@ namespace MarketDayAlertApp.Controllers
             _locationService = locationService;
         }
         // GET: LocationsController
+        [Authorize]
         public ActionResult Index()
         {
             var locations = _locationService.ListLocations();
@@ -30,12 +32,14 @@ namespace MarketDayAlertApp.Controllers
         }
 
         // GET: LocationsController/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: LocationsController/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateLocationDto location)

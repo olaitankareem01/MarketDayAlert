@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MarketDayAlertApp.Migrations
 {
-    public partial class initia : Migration
+    public partial class AddedNotification : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,6 +40,25 @@ namespace MarketDayAlertApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MarketLocations", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Message = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    RecipientEmail = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ScheduledDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -194,6 +213,33 @@ namespace MarketDayAlertApp.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "UserSubscriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    MarketId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSubscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserSubscriptions_Markets_MarketId",
+                        column: x => x.MarketId,
+                        principalTable: "Markets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserSubscriptions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_ItemMarket_itemsId",
                 table: "ItemMarket",
@@ -223,6 +269,16 @@ namespace MarketDayAlertApp.Migrations
                 name: "IX_Users_LocationId",
                 table: "Users",
                 column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSubscriptions_MarketId",
+                table: "UserSubscriptions",
+                column: "MarketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSubscriptions_UserId",
+                table: "UserSubscriptions",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -234,16 +290,22 @@ namespace MarketDayAlertApp.Migrations
                 name: "MarketItems");
 
             migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
                 name: "RoleUser");
+
+            migrationBuilder.DropTable(
+                name: "UserSubscriptions");
 
             migrationBuilder.DropTable(
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Markets");
+                name: "Role");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Markets");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -1,11 +1,15 @@
 ﻿using MarketDayAlertApp.Models.DTOs;
 using MarketDayAlertApp.Models.ViewModels;
 using MarketDayAlertApp.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MarketDayAlertApp.Controllers
@@ -43,19 +47,31 @@ namespace MarketDayAlertApp.Controllers
         {
             try
             {
-                var IsAccountValid = _userService.Login(user.Email, user.Password);
-                if(IsAccountValid == false)
+                if (ModelState.IsValid)
                 {
-                    ViewBag.Message = "Email or Password is Invalid!";
-                    return View();
+                    var IsAccountValid = _userService.Login(user.Email, user.Password);
+                    if (IsAccountValid)
+                    {
+                      
+                        var Identity = new ClaimsIdentity(new[] { 
+                         new Claim(ClaimTypes.Email, user.Email)
+                        }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        var Principal = new ClaimsPrincipal(Identity);
+                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, Principal);
+                        ViewBag.Message = "Login Successful!";
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                 
+
                 }
-                ViewBag.Message = "Login Successful!";
-             
-                return RedirectToAction("Index","Home");
-            }
-            catch
-            {
+                ModelState.AddModelError(" ","Invalid username/password");
                 return View();
+            }
+            catch(Exception ex)
+            {
+                return View(ex.Message);
             }
           
         }

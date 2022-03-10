@@ -1,0 +1,51 @@
+﻿@model MarketDayAlertApp.Models.ViewModels.SubscriptionViewModel
+@{
+    ViewData["Title"] = "Subscribe";
+}
+
+<h1>Subscribe</h1>
+
+<h4>Market</h4>
+<hr />
+<div class="row">
+     <h3>@ViewBag.Message</h3>
+    <div class="col-md-4">
+        <form asp-action="Subscribe" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserId" value="@ViewBag.UserId" />
+            <input type="hidden" asp-for="MarketId" value="@ViewBag.MarketId" />
+            <div class="form-group">
+                <label asp-for="MarketName" class="control-label"></label>
+                <input asp-for="MarketName" value="@ViewBag.MarketName" class="form-control" readonly />
+                <span asp-validation-for="MarketName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Frequency" class="control-label">Intervals Of @ViewBag.MarketName  Market</label>
+                <input asp-for="Frequency" class="form-control" value="@ViewBag.Frequency" readonly />
+                <span asp-validation-for="Frequency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NotificationType" class="control-label">How Often do you want to be alerted?</label>
+                @* <select asp-for="NotificationType" class="form-control"></select>*@
+                <input asp-for="NotificationType" class="form-control" />
+                <span asp-validation-for="NotificationType" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Alert Me" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details">Back to Market Details</a>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

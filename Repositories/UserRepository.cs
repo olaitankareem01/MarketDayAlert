@@ -1,6 +1,7 @@
 ﻿using MarketDayAlertApp.Context;
 using MarketDayAlertApp.Entities;
 using MarketDayAlertApp.Models.DTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace MarketDayAlertApp.Repositories
 
         public User Find(int Id)
         {
-            return _dbContext.Users.Find(Id);
+            return _dbContext.Users.Include(u => u.Roles).SingleOrDefault();
         }
 
         public IList<UserDto> ListUser()
